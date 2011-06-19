@@ -49,7 +49,7 @@ class BefungeShell(Cmd):
     _number_helpers = []
     for i in range(10):
         _number_helpers.append(
-            (str(i), 'Push the number {0} on the stack'.format(i))
+            (str(i), 'Push the number %d on the stack' % i)
         )
     misc_helpers = [
         ('+', 'Addition: Pop a and b, then push a+b'),
@@ -100,7 +100,7 @@ class BefungeShell(Cmd):
         self.setup_help()
 
     def print_(self, s=''):
-        self.stdout.write('{0}\n'.format(s))
+        self.stdout.write('%s\n' % s)
         self.stdout.flush()
 
     def emptyline(self):
@@ -190,13 +190,13 @@ class BefungeShell(Cmd):
                     self.print_(
                         'Note: The commands #, g, p are not supported.')
                 else:
-                    self.print_('Error: unknown command {0!r}'.format(command))
+                    self.print_('Error: unknown command %r' % command)
 
     def setup_help(self):
         for command, helpmsg in self._befunge_help.iteritems():
             setattr(
                 self,
-                'help_{0}'.format(command),
+                'help_%s' % command,
                 lambda: self.print_(helpmsg)
             )
 
