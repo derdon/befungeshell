@@ -4,13 +4,21 @@ import random
 from cmd import Cmd
 from sys import stderr
 from operator import add, sub, mul, floordiv, mod, not_, gt as greater
-from itertools import izip
+try:
+    from itertools import izip
+except ImportError:  # python3
+    izip = zip
 from platform import python_version_tuple
 
 if python_version_tuple()[:2] < ('2', '7'):
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
+
+try:
+    range = xrange
+except NameError:  # python3
+    pass
 
 
 class Stack(list):
@@ -39,7 +47,7 @@ class Stack(list):
 
 class BefungeShell(Cmd):
     _number_helpers = []
-    for i in xrange(10):
+    for i in range(10):
         _number_helpers.append(
             (str(i), 'Push the number {0} on the stack'.format(i))
         )
