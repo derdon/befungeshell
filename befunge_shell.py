@@ -34,11 +34,8 @@ class Stack(list):
         try:
             top_value = self[-1]
         except IndexError:
-            stderr.write(
-                'Warning: Cannot access the top values of an empty stack\n'
-            )
-        else:
-            self.append(top_value)
+            top_value = 0
+        self.append(top_value)
 
     def swap_topmost_values(self):
         'swap the two topmost values in the stack'
