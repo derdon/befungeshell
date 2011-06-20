@@ -131,8 +131,6 @@ class BefungeShell(Cmd):
         # check if string mode is enabled; if it is, push the ASCII value
         # of the entered character to the stack
         if self.string_mode:
-            # XXX: is there a way to escape double quotes? should I support
-            # XXX: escaping with a backslash?
             # make sure that no double quote is added:
             if not line == '"':
                 self.stack.append(ord(line))
