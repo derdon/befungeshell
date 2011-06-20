@@ -5,9 +5,9 @@ from cmd import Cmd
 from sys import stderr
 from operator import add, sub, mul, floordiv, mod, not_, gt as greater
 try:
-    from itertools import izip
+    from itertools import izip as zip
 except ImportError:  # python3
-    izip = zip
+    pass
 from platform import python_version_tuple
 
 if python_version_tuple()[:2] < ('2', '7'):
@@ -17,6 +17,7 @@ else:
 
 try:
     range = xrange
+    input = raw_input
 except NameError:  # python3
     pass
 
@@ -145,7 +146,7 @@ class BefungeShell(Cmd):
             else:
                 # converting to number worked, push its value to the stack if
                 # it is in the range 0..9
-                if num in xrange(10):
+                if num in range(10):
                     self.stack.append(num)
                 else:
                     self.print_('Error: only numbers from 0 to 9 are allowed')
@@ -188,7 +189,7 @@ class BefungeShell(Cmd):
                     self.print_('Error: unknown command %r' % command)
 
     def setup_help(self):
-        for command, helpmsg in self._befunge_help.iteritems():
+        for command, helpmsg in self._befunge_help.items():
             setattr(
                 self,
                 'help_%s' % command,
@@ -216,7 +217,7 @@ class BefungeShell(Cmd):
             subheaders = ['Befunge Commands', '\nAdditional helper functions']
             helper_functions = ['show_stack', 'show_pc', 'quit', 'help']
             commands = (self._befunge_cmds, helper_functions)
-            for subh, command in izip(subheaders, commands):
+            for subh, command in zip(subheaders, commands):
                 self.print_(subh)
                 if self.subruler:
                     self.print_(self.subruler * len(subh))
@@ -265,7 +266,7 @@ class BefungeShell(Cmd):
 
     def prompt_num(self):
         try:
-            num = int(raw_input('Enter a number please: '))
+            num = int(input('Enter a number please: '))
         except ValueError:
             self.print_('Error: You should have entered a number!')
         else:
@@ -273,7 +274,7 @@ class BefungeShell(Cmd):
 
     def prompt_char(self):
         try:
-            char = raw_input('Enter one character please: ')[:1] or '\n'
+            char = input('Enter one character please: ')[:1] or '\n'
         except IndexError:
             self.print_('Error: You should have entered one character!')
         else:
