@@ -1,0 +1,3 @@
+[run]
+include = befunge_shell.py
+omit = test_shell.py
