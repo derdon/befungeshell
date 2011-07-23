@@ -16,9 +16,18 @@ def pytest_generate_tests(metafunc):
         '%': mod,
         '`': greater
     }
-    if metafunc.function.__name__ == 'test_shell_calc_op':
+    change_pc_commands = '><^v?_|'
+    unsupported_commands = '#gp'
+    func_name = metafunc.function.__name__
+    if func_name == 'test_shell_calc_op':
         for command, op_func in operators.items():
             metafunc.addcall(funcargs=dict(cmd=command, callback=op_func))
+    elif func_name == 'test_parse_change_pc_command':
+        for command in change_pc_commands:
+            metafunc.addcall(funcargs=dict(cmd=command))
+    elif func_name == 'test_unsupported_commands':
+        for command in unsupported_commands:
+            metafunc.addcall(funcargs=dict(unsupported_cmd=command))
 
 
 def pytest_funcarg__empty_stack(request):
@@ -113,3 +122,26 @@ def test_shell_calc_op(monkeypatch, cmd, callback):
     shell = BefungeShell()
     shell.parse_command(cmd)
     shell.calculate.assert_called_with(callback)
+
+
+def test_parse_change_pc_command(monkeypatch, cmd):
+    monkeypatch.setattr(BefungeShell, 'change_pc', Mock())
+    shell = BefungeShell()
+    shell.parse_command(cmd)
+    shell.change_pc.assert_called_with(cmd)
+
+
+def test_unsupported_commands(monkeypatch, unsupported_cmd):
+    monkeypatch.setattr(BefungeShell, 'print_', Mock())
+    shell = BefungeShell()
+    shell.parse_command(unsupported_cmd)
+    shell.print_.assert_called_with(
+        'Note: The commands #, g, p are not supported.')
+
+
+def test_unknown_command(monkeypatch):
+    monkeypatch.setattr(BefungeShell, 'print_', Mock())
+    shell = BefungeShell()
+    shell.parse_command('thiscommanddoesnotexistandwillneverbe')
+    shell.print_.assert_called_with(
+        "Error: unknown command 'thiscommanddoesnotexistandwillneverbe'")
