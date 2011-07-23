@@ -39,6 +39,8 @@ def pytest_funcarg__nonempty_stack(request):
 
 
 def pytest_funcarg__shell(request):
+    monkeypatch = request.getfuncargvalue('monkeypatch')
+    monkeypatch.setattr(BefungeShell, 'print_', Mock())
     stdout = Mock(spec=['write', 'flush'], name='stdout')
     return BefungeShell(stdin=Mock(name='stdin'), stdout=stdout)
 
@@ -105,9 +107,8 @@ class TestIntegers(object):
 
     def test_invalid_num(self, shell):
         shell.default('23')
-        shell.stdout.write.assert_called_with(
-            'Error: only numbers from 0 to 9 are allowed\n')
-        assert shell.stdout.flush.called
+        shell.print_.assert_called_with(
+            'Error: only numbers from 0 to 9 are allowed')
 
 
 def test_shell_non_integer(monkeypatch):
@@ -131,33 +132,25 @@ def test_parse_change_pc_command(monkeypatch, cmd):
     shell.change_pc.assert_called_with(cmd)
 
 
-def test_unsupported_commands(monkeypatch, unsupported_cmd):
-    monkeypatch.setattr(BefungeShell, 'print_', Mock())
-    shell = BefungeShell()
+def test_unsupported_commands(shell, unsupported_cmd):
     shell.parse_command(unsupported_cmd)
     shell.print_.assert_called_with(
         'Note: The commands #, g, p are not supported.')
 
 
-def test_unknown_command(monkeypatch):
-    monkeypatch.setattr(BefungeShell, 'print_', Mock())
-    shell = BefungeShell()
+def test_unknown_command(shell):
     shell.parse_command('thiscommanddoesnotexistandwillneverbe')
     shell.print_.assert_called_with(
         "Error: unknown command 'thiscommanddoesnotexistandwillneverbe'")
 
 
-def test_help_message(monkeypatch):
-    monkeypatch.setattr(BefungeShell, 'print_', Mock())
-    shell = BefungeShell()
+def test_help_message(shell):
     shell.help_help()
     shell.print_.assert_called_with(
         'Use the command "help" to get a list of all available commands. '
         'Or type "help <command>" to get specific help about this command.')
 
 
-def test_exit_simulation(monkeypatch):
-    monkeypatch.setattr(BefungeShell, 'print_', Mock())
-    shell = BefungeShell()
+def test_exit_simulation(shell):
     shell.simulate_exit()
     shell.print_.assert_called_with('Imagine your script would end now ;-)')
