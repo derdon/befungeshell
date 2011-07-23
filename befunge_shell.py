@@ -2,7 +2,6 @@
 
 import random
 from cmd import Cmd
-from sys import stderr
 from operator import add, sub, mul, floordiv, mod, not_, gt as greater
 try:
     from itertools import izip as zip
