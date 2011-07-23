@@ -145,3 +145,19 @@ def test_unknown_command(monkeypatch):
     shell.parse_command('thiscommanddoesnotexistandwillneverbe')
     shell.print_.assert_called_with(
         "Error: unknown command 'thiscommanddoesnotexistandwillneverbe'")
+
+
+def test_help_message(monkeypatch):
+    monkeypatch.setattr(BefungeShell, 'print_', Mock())
+    shell = BefungeShell()
+    shell.help_help()
+    shell.print_.assert_called_with(
+        'Use the command "help" to get a list of all available commands. '
+        'Or type "help <command>" to get specific help about this command.')
+
+
+def test_exit_simulation(monkeypatch):
+    monkeypatch.setattr(BefungeShell, 'print_', Mock())
+    shell = BefungeShell()
+    shell.simulate_exit()
+    shell.print_.assert_called_with('Imagine your script would end now ;-)')
