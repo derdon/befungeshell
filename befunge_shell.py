@@ -7,12 +7,11 @@ try:
     from itertools import izip as zip
 except ImportError:  # python3
     pass
-from platform import python_version_tuple
 
-if python_version_tuple()[:2] < ('2', '7'):
-    from ordereddict import OrderedDict
-else:
+try:
     from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 try:
     range = xrange
