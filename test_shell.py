@@ -8,6 +8,50 @@ import pytest
 
 
 def pytest_generate_tests(metafunc):
+    help_messages = dict([
+        ('0', 'Push the number 0 on the stack'),
+        ('1', 'Push the number 1 on the stack'),
+        ('2', 'Push the number 2 on the stack'),
+        ('3', 'Push the number 3 on the stack'),
+        ('4', 'Push the number 4 on the stack'),
+        ('5', 'Push the number 5 on the stack'),
+        ('6', 'Push the number 6 on the stack'),
+        ('7', 'Push the number 7 on the stack'),
+        ('8', 'Push the number 8 on the stack'),
+        ('9', 'Push the number 9 on the stack'),
+        ('+', 'Addition: Pop a and b, then push a+b'),
+        ('-', 'Subtraction: Pop a and b, then push b-a'),
+        ('*', 'Multiplication: Pop a and b, then push a*b'),
+        ('/', 'Integer division: Pop a and b, then push b/a, rounded down. '
+             'If a is zero, ask the user what result they want.'),
+        ('%', 'Modulo: Pop a and b, then push the remainder of the integer '
+             'division of b/a. If a is zero, ask the user what result they '
+             'want.'),
+        ('!', 'Logical NOT: Pop a value. If the value is zero, push 1; '
+             'otherwise, push zero.'),
+        ('`', 'Greater than: Pop a and b, then push 1 if b>a, otherwise)'
+            ' zero.'),
+        ('>', 'Change PC (Program Counter) to the direction "right"'),
+        ('<', 'Change PC (Program Counter) to the direction "left"'),
+        ('^', 'Change PC (Program Counter) to the direction "up"'),
+        ('v', 'Change PC (Program Counter) to the direction "down"'),
+        ('?', 'Set PC (Program Counter) to a random direction (that means, the'
+             ' direction can be the same after this command!)'),
+        ('_', 'Pop a value; set PC direction to right if value equals 0, left '
+             'otherwise'),
+        ('|', 'Pop a value; set PC direction to down if value equals 0, up '
+             'otherwise'),
+        ('"', 'Start string mode: push each character\'s ASCII value all the'
+             ' way up to the next "'),
+        (':', 'Duplicate value on top of the stack'),
+        ('\\', 'Swap two values on top of the stack'),
+        ('$', 'Pop value from the stack'),
+        ('.', 'Pop value and output as an integer'),
+        (',', 'Pop value and output as ASCII character'),
+        ('#', 'Skip the following command'),
+        ('&', 'Ask user for a number and push it'),
+        ('~', 'Ask user for a character and push its ASCII value'),
+        ('@', 'End program')])
     operators = {
         '+': add,
         '-': sub,
@@ -28,6 +72,10 @@ def pytest_generate_tests(metafunc):
     elif func_name == 'test_unsupported_commands':
         for command in unsupported_commands:
             metafunc.addcall(funcargs=dict(unsupported_cmd=command))
+    elif func_name == 'test_befunge_cmd_help':
+        for command, help_message in help_messages.items():
+            metafunc.addcall(
+                funcargs=dict(cmd=command, expected_help=help_message))
 
 
 def pytest_funcarg__empty_stack(request):
@@ -152,3 +200,8 @@ def test_help_message(shell):
 def test_exit_simulation(shell):
     shell.simulate_exit()
     shell.print_.assert_called_with('Imagine your script would end now ;-)')
+
+
+def test_befunge_cmd_help(shell, cmd, expected_help):
+    shell.do_help(cmd)
+    shell.print_.assert_called_with(expected_help)
