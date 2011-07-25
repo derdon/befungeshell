@@ -15,7 +15,6 @@ except ImportError:
 
 try:
     range = xrange
-    input = raw_input
 except NameError:  # python3
     pass
 
@@ -93,6 +92,11 @@ class BefungeShell(Cmd):
         self.stack = Stack()
         self.string_mode = False
         self.pc = '>'
+
+    def input(self, prompt):
+        self.print_(prompt, False)
+        input = self.stdin.readline()
+        return input.rstrip()
 
     def print_(self, s='', add_newline=True):
         self.stdout.write('%s%s' % (s, '\n' if add_newline else ''))
@@ -248,7 +252,7 @@ class BefungeShell(Cmd):
 
     def prompt_num(self):
         try:
-            num = int(input('Enter a number please: '))
+            num = int(self.input('Enter a number please: '))
         except ValueError:
             self.print_('Error: You should have entered a number!')
         else:
@@ -256,7 +260,7 @@ class BefungeShell(Cmd):
 
     def prompt_char(self):
         try:
-            char = input('Enter one character please: ')[:1] or '\n'
+            char = self.input('Enter one character please: ')[:1] or '\n'
         except IndexError:
             self.print_('Error: You should have entered one character!')
         else:
