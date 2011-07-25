@@ -211,8 +211,7 @@ class BefungeShell(Cmd):
     def help_help(self):
         self.print_(
             'Use the command "help" to get a list of all available commands. '
-            'Or type "help <command>" to get specific help about this command.'
-        )
+            'Or type "help <command>" to get specific help about this command.')
 
     def calculate(self, operator):
         if len(self.stack) >= 2:
