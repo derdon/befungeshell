@@ -232,8 +232,7 @@ class BefungeShell(Cmd):
             self.pc = '><'[bool(top_val)] if pc == '_' else 'v^'[bool(top_val)]
         else:
             raise ValueError(
-                'PC (Program Counter) must be either <, >, ^, v, ?, _ or |'
-            )
+                'PC (Program Counter) must be either <, >, ^, v, ?, _ or |')
 
     def toggle_string_mode(self):
         '''one double quote toggles string mode which causes every following
