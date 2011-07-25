@@ -80,6 +80,9 @@ def pytest_generate_tests(metafunc):
         for command, help_message in help_messages.items():
             metafunc.addcall(
                 funcargs=dict(cmd=command, expected_help=help_message))
+    elif func_name == 'test_fixed_pc':
+        for fixed_pc in '><^v':
+            metafunc.addcall(funcargs=dict(pc=fixed_pc))
 
 
 def pytest_funcarg__empty_stack(request):
@@ -199,6 +202,40 @@ def test_help_message(shell):
     shell.print_.assert_called_with(
         'Use the command "help" to get a list of all available commands. '
         'Or type "help <command>" to get specific help about this command.')
+
+
+def test_invalid_pc(shell):
+    with pytest.raises(ValueError):
+        shell.change_pc('x')
+
+
+def test_fixed_pc(shell, pc):
+    shell.change_pc(pc)
+    assert shell.pc == pc
+
+
+def test_conditional_pc_up(shell):
+    shell.stack = Stack([True])
+    shell.change_pc('|')
+    assert shell.pc == '^'
+
+
+def test_conditional_pc_down(shell):
+    shell.stack = Stack([False])
+    shell.change_pc('|')
+    assert shell.pc == 'v'
+
+
+def test_conditional_pc_left(shell):
+    shell.stack = Stack([True])
+    shell.change_pc('_')
+    assert shell.pc == '<'
+
+
+def test_conditional_pc_right(shell):
+    shell.stack = Stack([False])
+    shell.change_pc('_')
+    assert shell.pc == '>'
 
 
 def test_exit_simulation(shell):
