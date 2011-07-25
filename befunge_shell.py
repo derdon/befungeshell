@@ -94,8 +94,8 @@ class BefungeShell(Cmd):
         self.string_mode = False
         self.pc = '>'
 
-    def print_(self, s=''):
-        self.stdout.write('%s\n' % s)
+    def print_(self, s='', add_newline=True):
+        self.stdout.write('%s%s' % (s, '\n' if add_newline else ''))
         self.stdout.flush()
 
     def emptyline(self):
