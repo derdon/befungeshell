@@ -197,6 +197,11 @@ def test_unknown_command(shell):
         "Error: unknown command 'thiscommanddoesnotexistandwillneverbe'")
 
 
+def test_befunge_cmd_help(shell, cmd, expected_help):
+    shell.do_help(cmd)
+    shell.print_.assert_called_with(expected_help)
+
+
 def test_help_message(shell):
     shell.help_help()
     shell.print_.assert_called_with(
@@ -241,8 +246,3 @@ def test_conditional_pc_right(shell):
 def test_exit_simulation(shell):
     shell.simulate_exit()
     shell.print_.assert_called_with('Imagine your script would end now ;-)')
-
-
-def test_befunge_cmd_help(shell, cmd, expected_help):
-    shell.do_help(cmd)
-    shell.print_.assert_called_with(expected_help)
