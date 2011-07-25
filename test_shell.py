@@ -9,6 +9,10 @@ import pytest
 
 def pytest_generate_tests(metafunc):
     help_messages = dict([
+        ('show_stack', 'print the content of the stack'),
+        ('show_pc', 'print the direction of the PC (Program Counter)'),
+        ('EOF', 'exit the shell with the command "exit", "quit", or by typing '
+            'Ctrl+D'),
         ('0', 'Push the number 0 on the stack'),
         ('1', 'Push the number 1 on the stack'),
         ('2', 'Push the number 2 on the stack'),
