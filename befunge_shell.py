@@ -94,7 +94,6 @@ class BefungeShell(Cmd):
         self.stack = Stack()
         self.string_mode = False
         self.pc = '>'
-        self.setup_help()
 
     def print_(self, s=''):
         self.stdout.write('%s\n' % s)
@@ -187,27 +186,14 @@ class BefungeShell(Cmd):
                 else:
                     self.print_('Error: unknown command %r' % command)
 
-    def setup_help(self):
-        for command, helpmsg in self._befunge_help.items():
-            setattr(
-                self,
-                'help_%s' % command,
-                lambda: self.print_(helpmsg)
-            )
-
     def do_help(self, arg):
         if arg:
             if arg in self._befunge_cmds:
                 self.print_(self._befunge_help[arg])
             else:
-                try:
-                    func = getattr(self, 'help_' + arg)
-                except AttributeError:
-                    docstring = getattr(self, 'do_' + arg).__doc__
-                    if docstring:
-                        self.print_(docstring)
-                else:
-                    func()
+                docstring = getattr(self, 'do_' + arg).__doc__
+                if docstring:
+                    self.print_(docstring)
         else:
             header_len = len(self.doc_header)
             self.print_(self.doc_header)

@@ -76,10 +76,8 @@ class TestStackSwap(object):
         assert nonempty_stack == Stack([1, 3, 2])
 
 
-def test_shell_init(monkeypatch):
-    monkeypatch.setattr(BefungeShell, 'setup_help', Mock())
+def test_shell_init():
     shell = BefungeShell()
-    assert shell.setup_help.called
     assert shell.subruler == '-'
     assert shell.completekey == 'tab'
     assert shell.prompt == '>>> '
