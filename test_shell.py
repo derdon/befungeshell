@@ -259,5 +259,6 @@ def test_convert_to_integer(shell, num_string, expected_number):
 
 def test_convert_invalid_integer(shell):
     ret = shell.convert_to_integer('3.4')
-    shell.print_.assert_called_with('Error: You should have entered a number!')
+    shell.print_.assert_called_with(
+        'Error: You should have entered an integer!')
     assert ret is None

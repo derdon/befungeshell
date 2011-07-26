@@ -254,7 +254,7 @@ class BefungeShell(Cmd):
         try:
             number = int(s)
         except ValueError:
-            self.print_('Error: You should have entered a number!')
+            self.print_('Error: You should have entered an integer!')
         else:
             return number
 
