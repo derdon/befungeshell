@@ -83,6 +83,10 @@ def pytest_generate_tests(metafunc):
     elif func_name == 'test_fixed_pc':
         for fixed_pc in '><^v':
             metafunc.addcall(funcargs=dict(pc=fixed_pc))
+    elif func_name == 'test_convert_to_integer':
+        for num_str, expected_num in {'-1': -1, '+0': 0, '3': 3}.items():
+            metafunc.addcall(funcargs=dict(
+                num_string=num_str, expected_number=expected_num))
 
 
 def pytest_funcarg__empty_stack(request):
@@ -246,3 +250,14 @@ def test_conditional_pc_right(shell):
 def test_exit_simulation(shell):
     shell.simulate_exit()
     shell.print_.assert_called_with('Imagine your script would end now ;-)')
+
+
+def test_convert_to_integer(shell, num_string, expected_number):
+    number = shell.convert_to_number(num_string)
+    assert number == expected_number
+
+
+def test_convert_invalid_integer(shell):
+    ret = shell.convert_to_number('3.4')
+    shell.print_.assert_called_with('Error: You should have entered a number!')
+    assert ret is None
