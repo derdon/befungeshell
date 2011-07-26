@@ -250,13 +250,16 @@ class BefungeShell(Cmd):
     def simulate_exit(self):
         self.print_('Imagine your script would end now ;-)')
 
-    def prompt_num(self):
+    def convert_to_number(self, s):
         try:
-            num = int(self.input('Enter a number please: '))
+            number = int(s)
         except ValueError:
             self.print_('Error: You should have entered a number!')
         else:
-            return num
+            return number
+
+    def prompt_num(self):
+        return self.convert_to_number(self.input('Enter a number please: '))
 
     def prompt_char(self):
         try:
