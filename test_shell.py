@@ -253,11 +253,11 @@ def test_exit_simulation(shell):
 
 
 def test_convert_to_integer(shell, num_string, expected_number):
-    number = shell.convert_to_number(num_string)
+    number = shell.convert_to_integer(num_string)
     assert number == expected_number
 
 
 def test_convert_invalid_integer(shell):
-    ret = shell.convert_to_number('3.4')
+    ret = shell.convert_to_integer('3.4')
     shell.print_.assert_called_with('Error: You should have entered a number!')
     assert ret is None
