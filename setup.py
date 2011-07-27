@@ -1,4 +1,9 @@
+from __future__ import with_statement
+
 from distutils.core import setup
+
+with open('README.rst') as f:
+    readme_content = f.read()
 
 setup(
     name='befungeshell',
@@ -9,6 +14,7 @@ setup(
     description=(
         'An interactive shell for the esoteric programming language '
         'Befunge for debugging purposes.'),
+    long_description=readme_content,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
