@@ -101,7 +101,8 @@ def pytest_funcarg__shell(request):
     monkeypatch = request.getfuncargvalue('monkeypatch')
     monkeypatch.setattr(BefungeShell, 'print_', Mock())
     stdout = Mock(spec=['write', 'flush'], name='stdout')
-    return BefungeShell(stdin=Mock(name='stdin'), stdout=stdout)
+    stdin = Mock(spec=['readline'], name='stdin')
+    return BefungeShell(stdin=stdin, stdout=stdout)
 
 
 class TestStackPop(object):
@@ -143,6 +144,13 @@ def test_shell_init():
     assert shell.stack == Stack()
     assert shell.string_mode == False
     assert shell.pc == '>'
+
+
+def test_input(shell):
+    shell.stdin.readline = Mock(return_value='42\n')
+    ret = shell.input('age?')
+    shell.print_.assert_called_with('age?', False)
+    assert ret == '42'
 
 
 class TestStringMode(object):
