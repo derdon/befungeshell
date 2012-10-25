@@ -18,7 +18,7 @@ needs_ordereddict = py_version in set([(2, 5), (2, 6), (3, 0)])
 
 extra = {}
 if with_setuptools:
-    extra['install_requires'] = needs_ordereddict
+    extra['install_requires'] = ['ordereddict'] if needs_ordereddict else []
 
 setup(
     name='befungeshell',
