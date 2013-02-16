@@ -89,15 +89,18 @@ def pytest_generate_tests(metafunc):
                 num_string=num_str, expected_number=expected_num))
 
 
-def pytest_funcarg__empty_stack(request):
+@pytest.fixture
+def empty_stack():
     return Stack()
 
 
-def pytest_funcarg__nonempty_stack(request):
+@pytest.fixture
+def nonempty_stack():
     return Stack([1, 2, 3])
 
 
-def pytest_funcarg__shell(request):
+@pytest.fixture
+def shell(request):
     monkeypatch = request.getfuncargvalue('monkeypatch')
     monkeypatch.setattr(BefungeShell, 'print_', Mock())
     stdout = Mock(spec=['write', 'flush'], name='stdout')
